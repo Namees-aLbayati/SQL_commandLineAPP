@@ -41,6 +41,7 @@ inquirer
 break;
 
 case "Display Departments sections?":
+  console.log('hi')
   break;
 
 
