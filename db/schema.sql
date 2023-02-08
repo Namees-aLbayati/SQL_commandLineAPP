@@ -73,4 +73,4 @@ INSERT INTO employee (f_name,L_name,r_id,manager_id) VALUES
 
 
 -- SELECT f_name,title,salary,manager_id from employee JOIN roleee where employee.r_id=role_id;
--- SELECT f_name from employee
+-- SELECT f_name from employeeexit
