@@ -6,7 +6,7 @@ dotenv.config()
 
 var roleArr=[]
 var managerArr=[]
-
+var departmentArr=[]
 
 import cTable from 'console.table'
 const db = mysql.createConnection(
@@ -103,6 +103,57 @@ break;
 
 
 break
+
+case('Add Role'):
+db.query('select * from department',(error,depres)=>{
+  for(var i=0;i<depres.length;i++){
+    departmentArr.push(depres[i].name)
+  }
+
+})
+inquirer.prompt(
+  [{
+    // INSERT INTO roleee (title,salary,department_id) VALUES
+    message:'enter the title that you want to add it?',
+    type:'input',
+    name:'title',
+
+},
+{
+  message:'enter the salary?',
+  type:'input',
+  name:'salary'
+
+},
+{
+  message:'which department belongs to?',
+  type:'rawlist',
+  name:'departmentname',
+  choices:departmentArr
+}]).then((res)=>{
+  console.log('adding role data',res.title,res.salary)
+  db.query('select id from department where name=?',`${res.departmentname}`,(error,results)=>{
+    console.log('department id res',results[0].id)
+    var departmentID=results[0].id;
+    var tit=res.title;
+    var sal=res.salary;
+   
+    db.query('INSERT INTO roleee (title,salary,department_id) VALUES(?,?,?)',[tit,sal,departmentID],(error,here)=>{
+
+      if(here.affectedRows=1){
+        console.log('role added successfuly')
+        startApp()
+      }else{
+        console.log('error while adding new role')
+      }
+    })
+  })
+})
+
+break
+case('Add Department'):
+addDep()
+break
   
 
 
@@ -111,6 +162,28 @@ break
 
     })
   }
+
+
+
+  const addDep=()=>{
+    inquirer.prompt({
+      name:'departmentname',
+      message:'enter department name?',
+      type:'input'
+    }).then((data)=>{
+      db.query('INSERT INTO department(name) VALUES (?)',data.departmentname,(err,result)=>{
+        console.log(result)
+        if(result.affectedRows=1){
+          console.log('new department added')
+          startApp()
+        }else{
+          console.log('something went wrong while adding new department')
+        }
+      })
+
+    })
+  }
+
 
   startApp()
 
@@ -148,17 +221,30 @@ break
         const managerFirst=data.m_id.split(' ')
         var mf=managerFirst[0];
         var ml=managerFirst[1];
-        console.log(managerFirst,data)
-        db.query('select emp_id from employee where firstname=?',`${managerFirst[0]}`,(err,ress)=>{
-          console.log(ress)
+        db.query('select emp_id from employee where firstname=?',`${managerFirst[0]}`,(err,managerdata)=>{
+          console.log('manager,id',managerdata[0].emp_id)
+
+          db.query('select role_id from `roleee` where title=?',`${data.r_id}`,(err,result2)=>{
+            console.log('role id',result2[0].role_id)
+            db.query('INSERT INTO employee (firstname,lastname,r_id,manager_id) VALUES (?,?,?,?) ',[data.fname,data.lname,result2[0].role_id,managerdata[0].emp_id],(error,empinserdata)=>{
+              console.log('after ins',empinserdata)
+              if (empinserdata.affectedRows= 1){
+                console.log('new employee added successfuly ')
+                startApp()
+              }else{
+                console.log('something went error')
+              }
+            })
+          
+          })
+
+                
+       
         })
 
-        db.query('select role_id from `roleee` where title=?',`${data.r_id}`,(err,result2)=>{
-
-        })
-
-        db.query('insert into employee firstname,lastname,manager_id,r_id values(?,?,?,?)',)
       
+
+       
 
 
 
