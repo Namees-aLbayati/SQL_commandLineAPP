@@ -22,8 +22,8 @@ ON DELETE SET NULL
 
 CREATE TABLE employee(
     emp_id INT AUTO_INCREMENT PRIMARY KEY,
-    f_name VARCHAR(30),
-    L_name VARCHAR(30),
+    firstname VARCHAR(30),
+    lastname VARCHAR(30),
         manager_id INT,
 
     r_id INT,
@@ -64,10 +64,10 @@ INSERT INTO roleee (title,salary,department_id) VALUES
 
 
 
-INSERT INTO employee (f_name,L_name,r_id,manager_id) VALUES
+INSERT INTO employee (firstname,lastname,r_id,manager_id) VALUES
 ('namees',"mohammed",1,5),
-('umme sad',"sadyea",1,1),
-(' layth ',"najm",2,2),
+('umme',"sadyea",1,1),
+('layth ',"najm",2,2),
 ('mery',"lami",2,44),
 ('fati',"ali",3,NULL);
 

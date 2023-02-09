@@ -85,9 +85,10 @@ break;
           roleArr.push(result[i].title);
 
         }
-        db.query('select * from employee',(err,result1)=>{
+        db.query('select concat(firstname," ",lastname) AS fullname from employee',(err,result1)=>{
           for(var i=0;i<result1.length;i++){
-            managerArr.push(result1[i].f_name+""+result1[i].L_name);
+            managerArr.push(result1[i].fullname);
+
   
           }    
           addemployeeInqu()
@@ -143,10 +144,24 @@ break
       }
       
       ]).then((data)=>{
-        console.log(data)
-        db.query(`select * from roleee where title=?`,r_id,(err,result2)=>{
-          console.log(result2)
+        let image;
+        const managerFirst=data.m_id.split(' ')
+        var mf=managerFirst[0];
+        var ml=managerFirst[1];
+        console.log(managerFirst,data)
+        db.query('select emp_id from employee where firstname=?',`${managerFirst[0]}`,(err,ress)=>{
+          console.log(ress)
         })
+
+        db.query('select role_id from `roleee` where title=?',`${data.r_id}`,(err,result2)=>{
+
+        })
+
+        db.query('insert into employee firstname,lastname,manager_id,r_id values(?,?,?,?)',)
+      
+
+
+
       })
   }
   
