@@ -154,6 +154,9 @@ break
 case('Add Department'):
 addDep()
 break
+case('update Employee Role Information'):
+updatefun()
+break
   
 
 
@@ -162,6 +165,69 @@ break
 
     })
   }
+
+const updatefun=()=>{
+console.log('update f')
+// INSERT INTO employee (firstname,lastname,r_id,manager_id) VALUES
+
+inquirer.prompt({
+name:'updateemp',
+message:'what employee info you would like to update',
+type:'rawlist',
+choices:['firstname','lastname','manager name','role']
+}).then((result)=>{
+  console.log(result)
+
+  switch(result.updateemp){
+    case('firstname'):
+    inquirer.prompt({
+      name:'lastname',
+      message:'enter last name?',
+      type:'input'
+
+    }).then((data)=>{
+
+      inquirer.prompt({
+        name:'firstname',
+        message:'enter first name after UPDATE?',
+        type:'input'
+  
+      }).then((firstnamequestion)=>{
+        db.query(`UPDATE employee SET firstname = (?) WHERE lastname='${data.lastname}'`,firstnamequestion.firstname,(error,lastres)=>{
+          console.log('after update',lastres)
+          startApp()
+        })
+
+
+      })
+
+    })
+
+    break
+    case('lastname'):
+
+    console.log('update lastname')
+    startApp()
+
+    break
+    case('manager name'):
+    console.log('update manager name')
+    startApp()
+
+
+    break
+    case('role'):
+    console.log('update role')
+    startApp()
+
+    break
+    default:
+      console.log('sorry we re unable to confirm ur request')
+      startApp()
+  }
+})
+}
+
 
 
 
