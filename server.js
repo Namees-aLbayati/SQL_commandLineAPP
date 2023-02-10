@@ -7,7 +7,7 @@ dotenv.config()
 var roleArr=[]
 var managerArr=[]
 var departmentArr=[]
-
+var managerArr2=[]
 import cTable from 'console.table'
 const db = mysql.createConnection(
   {
@@ -19,9 +19,14 @@ const db = mysql.createConnection(
   console.log("Connected to DB successfully")
 );
 
+var mydata1;
 
-
-
+db.query('select * from employee',(err,mydata)=>{
+  mydata1=mydata
+  for(var i=0;i<mydata.length;i++){
+    managerArr2.push(mydata[i].firstname+" "+mydata[i].lastname)
+  }
+})
 
 
 const startApp=function(){
@@ -206,16 +211,76 @@ choices:['firstname','lastname','manager name','role']
     break
     case('lastname'):
 
-    console.log('update lastname')
-    startApp()
+    inquirer.prompt([{
+      message:'enter first name?',
+      type:'input',
+      name:'first'
+    },{
+      message:'enter last name after UPDATe?',
+      name:'last',
+      type:'input'
+    }]).then((data)=>{
+      console.log('data',data)
+      db.query(`update employee set lastname='${data.last}' where firstname='${data.first}'`,(error,updateres)=>{
+        console.log('result after last update',updateres)
+        if(updateres.affectedRows=1){
+          console.log(`${data.first} has been updated `)
+          startApp()
+
+        }else{
+          console.log('something went wrong while updating info')
+
+        }
+      })
+    })
 
     break
+
+
     case('manager name'):
-    console.log('update manager name')
-    startApp()
+    
+    inquirer.prompt([{
+      message:'enter your first name?',
+      type:'input',
+      name:'fnme'
+    },{
+      message:' choice NEW MANGER NAME from the list?',
+      name:'mangernew',
+      type:"list",
+      choices:managerArr2
+    }]).then((ressss123)=>{
+      // console.log('results to update manager',result,mydata1)
+      var managerfirstname=ressss123.mangernew.split(" ")
+      var first=  ressss123.fnme
+var managerid;
 
 
+for(var i=0;i<mydata1.length;i++){
+  if(mydata1[i].firstname==managerfirstname[0]){
+     managerid=mydata1[i]. emp_id;
+
+  
+  }
+}
+ console.log(first,managerid)
+ console.log(`update employee set manager_id=${managerid} where firstname="${first}"`)
+     db.query(`update employee set manager_id=${managerid} where firstname="${first}"`,(error,afterupdate)=>{
+    console.log(afterupdate,'after update manger')
+
+  if(afterupdate.affectedRows=1){
+    console.log('manager has been updated ')
+  }else{
+    console.log('something went wrong while updating manager info')
+  }
+
+     })
+      
+    })
     break
+
+  
+
+
     case('role'):
     console.log('update role')
     startApp()
