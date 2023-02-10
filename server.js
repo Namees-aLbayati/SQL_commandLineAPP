@@ -3,7 +3,6 @@ import inquirer from 'inquirer';
 import * as dotenv from 'dotenv'
 dotenv.config()
 
-
 var roleArr=[]
 var managerArr=[]
 var departmentArr=[]
@@ -162,6 +161,12 @@ break
 case('update Employee Role Information'):
 updatefun()
 break
+
+case('EXIT'):
+console.log("exit bye")
+process.exit()
+
+break
   
 
 
@@ -179,7 +184,7 @@ inquirer.prompt({
 name:'updateemp',
 message:'what employee info you would like to update',
 type:'rawlist',
-choices:['firstname','lastname','manager name','role']
+choices:['firstname','lastname','manager name']
 }).then((result)=>{
   console.log(result)
 
